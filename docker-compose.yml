@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  notes-backend:
+    # Replace this with your backend image or build context/Dockerfile
+    image: ghcr.io/example/notes-backend:latest
+    container_name: notes-backend
+    environment:
+      - PORT=4000
+      # Ensure backend CORS allows http://localhost:3000 for dev
+      - CORS_ORIGINS=http://localhost:3000
+      - LOG_LEVEL=info
+    ports:
+      - "4000:4000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4000/health"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+  notes-frontend:
+    build:
+      context: ./notes_frontend
+      dockerfile: Dockerfile
+    container_name: notes-frontend
+    environment:
+      - REACT_APP_API_BASE=http://localhost:4000
+      - REACT_APP_BACKEND_URL=http://localhost:4000
+      - REACT_APP_FRONTEND_URL=http://localhost:3000
+      - REACT_APP_LOG_LEVEL=info
+      - PORT=3000
+    depends_on:
+      notes-backend:
+        condition: service_healthy
+    ports:
+      - "3000:3000"

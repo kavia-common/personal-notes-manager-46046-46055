@@ -4,6 +4,7 @@
  *   REACT_APP_API_BASE -> REACT_APP_BACKEND_URL -> http://localhost:4000
  * - Uses built-in fetch with JSON handling and basic error propagation.
  * - Optional logging via REACT_APP_LOG_LEVEL (debug|info|error).
+ * Environment variables are provided via CRA (prefix REACT_APP_). See README and .env.example.
  */
 
 // PUBLIC_INTERFACE
